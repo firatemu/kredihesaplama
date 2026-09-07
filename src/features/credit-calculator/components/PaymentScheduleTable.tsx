@@ -20,15 +20,17 @@ interface PaymentScheduleTableProps {
 }
 
 const HEADERS = [
-  "No",
-  "Ödeme Tarihi",
-  "Taksit Tutarı",
-  "Anapara",
-  "Faiz",
-  "KKDF",
-  "BSMV",
-  "Kalan Anapara",
+  { label: "No", align: "left" as const },
+  { label: "Ödeme Tarihi", align: "left" as const },
+  { label: "Taksit Tutarı", align: "right" as const },
+  { label: "Anapara", align: "right" as const },
+  { label: "Faiz", align: "right" as const },
+  { label: "KKDF", align: "right" as const },
+  { label: "BSMV", align: "right" as const },
+  { label: "Kalan Anapara", align: "right" as const },
 ];
+
+const cellPad = "px-2 py-2";
 
 export function PaymentScheduleTable({
   schedule,
@@ -52,19 +54,30 @@ export function PaymentScheduleTable({
   }, [schedule, totalRow]);
 
   return (
-    <div className="overflow-x-auto -mx-2 px-2">
-      <table className="min-w-[820px] w-full text-sm tabular-nums">
+    <div className="w-full max-w-full min-w-0">
+      <table className="w-full max-w-full table-fixed border-collapse text-sm tabular-nums">
+        <colgroup>
+          <col style={{ width: "4%" }} />
+          <col style={{ width: "12%" }} />
+          <col style={{ width: "14%" }} />
+          <col style={{ width: "13%" }} />
+          <col style={{ width: "12%" }} />
+          <col style={{ width: "11%" }} />
+          <col style={{ width: "11%" }} />
+          <col style={{ width: "23%" }} />
+        </colgroup>
         <thead className="bg-surface-muted/80 sticky top-0 z-[1]">
           <tr>
-            {HEADERS.map((h, i) => (
+            {HEADERS.map((h) => (
               <th
-                key={h}
+                key={h.label}
                 className={cn(
-                  "px-3 py-2 text-left font-semibold text-foreground-muted border-b border-border",
-                  i >= 2 && "text-right"
+                  cellPad,
+                  "font-semibold text-foreground-muted border-b border-border",
+                  h.align === "right" ? "text-right" : "text-left"
                 )}
               >
-                {h}
+                {h.label}
               </th>
             ))}
           </tr>
@@ -75,28 +88,48 @@ export function PaymentScheduleTable({
               key={row.installmentNo}
               className="odd:bg-surface even:bg-surface-muted/40 hover:bg-primary-50/40 transition-colors"
             >
-              <td className="px-3 py-2 border-b border-border text-foreground-muted">
+              <td
+                className={cn(
+                  cellPad,
+                  "border-b border-border text-foreground-muted"
+                )}
+              >
                 {row.installmentNo}
               </td>
-              <td className="px-3 py-2 border-b border-border">
+              <td className={cn(cellPad, "border-b border-border")}>
                 {formatDate(row.paymentDate)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right font-semibold text-foreground">
+              <td
+                className={cn(
+                  cellPad,
+                  "border-b border-border text-right font-semibold text-foreground"
+                )}
+              >
                 {formatCurrency(row.payment)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right">
+              <td
+                className={cn(cellPad, "border-b border-border text-right")}
+              >
                 {formatCurrency(row.principal)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right">
+              <td
+                className={cn(cellPad, "border-b border-border text-right")}
+              >
                 {formatCurrency(row.interest)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right">
+              <td
+                className={cn(cellPad, "border-b border-border text-right")}
+              >
                 {formatCurrency(row.kkdf)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right">
+              <td
+                className={cn(cellPad, "border-b border-border text-right")}
+              >
                 {formatCurrency(row.bsmv)}
               </td>
-              <td className="px-3 py-2 border-b border-border text-right">
+              <td
+                className={cn(cellPad, "border-b border-border text-right")}
+              >
                 {formatCurrency(row.remainingPrincipal)}
               </td>
             </tr>
@@ -104,25 +137,25 @@ export function PaymentScheduleTable({
         </tbody>
         <tfoot>
           <tr className="bg-surface-muted font-semibold text-foreground">
-            <td className="px-3 py-2 border-t border-border" colSpan={2}>
+            <td className={cn(cellPad, "border-t border-border")} colSpan={2}>
               TOPLAM
             </td>
-            <td className="px-3 py-2 border-t border-border text-right">
+            <td className={cn(cellPad, "border-t border-border text-right")}>
               {formatCurrency(totals.payment)}
             </td>
-            <td className="px-3 py-2 border-t border-border text-right">
+            <td className={cn(cellPad, "border-t border-border text-right")}>
               {formatCurrency(totals.principal)}
             </td>
-            <td className="px-3 py-2 border-t border-border text-right">
+            <td className={cn(cellPad, "border-t border-border text-right")}>
               {formatCurrency(totals.interest)}
             </td>
-            <td className="px-3 py-2 border-t border-border text-right">
+            <td className={cn(cellPad, "border-t border-border text-right")}>
               {formatCurrency(totals.kkdf)}
             </td>
-            <td className="px-3 py-2 border-t border-border text-right">
+            <td className={cn(cellPad, "border-t border-border text-right")}>
               {formatCurrency(totals.bsmv)}
             </td>
-            <td className="px-3 py-2 border-t border-border" />
+            <td className={cn(cellPad, "border-t border-border")} />
           </tr>
         </tfoot>
       </table>
@@ -246,9 +279,9 @@ export function PaymentSchedule({
           <div className="shrink-0 no-print">{headerAction}</div>
         ) : null}
       </CardHeader>
-      <CardBody>
-        {/* Desktop / tablet: full table */}
-        <div className="hidden md:block">
+      <CardBody className="px-3 sm:px-5 overflow-x-hidden">
+        {/* Desktop / tablet: full-width fixed table — no horizontal scroll */}
+        <div className="hidden md:block w-full max-w-full min-w-0">
           <PaymentScheduleTable schedule={schedule} totalRow={totalRow} />
         </div>
         {/* Mobile: collapsible cards */}
