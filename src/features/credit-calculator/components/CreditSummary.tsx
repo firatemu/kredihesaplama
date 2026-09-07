@@ -10,8 +10,10 @@ interface CreditSummaryProps {
 
 function MiniMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-border bg-surface-muted/50 px-3 py-2.5 min-w-0">
-      <p className="text-xs text-foreground-muted truncate">{label}</p>
+    <div className="min-w-0 border-l border-border pl-3 first:border-l-0 first:pl-0">
+      <p className="text-[11px] leading-tight text-foreground-muted truncate">
+        {label}
+      </p>
       <p className="mt-0.5 text-sm font-semibold tabular-nums text-foreground truncate">
         {value}
       </p>
@@ -22,15 +24,14 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
 export function CreditSummary({ result }: CreditSummaryProps) {
   if (!result) {
     return (
-      <div className="no-print rounded-lg border border-border bg-surface p-5 sm:p-6 shadow-[var(--shadow-card)]">
-        <div className="h-3 w-24 rounded bg-surface-muted animate-pulse" />
-        <div className="mt-4 h-4 w-28 rounded bg-surface-muted animate-pulse" />
-        <div className="mt-3 h-12 w-48 rounded bg-surface-muted animate-pulse" />
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="no-print rounded-lg border border-border bg-surface px-4 py-3 shadow-[var(--shadow-card)]">
+        <div className="h-3 w-28 rounded bg-surface-muted animate-pulse" />
+        <div className="mt-2 h-8 w-40 rounded bg-surface-muted animate-pulse" />
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="h-[58px] rounded-lg border border-border bg-surface-muted/40 animate-pulse"
+              className="h-10 rounded bg-surface-muted/50 animate-pulse"
             />
           ))}
         </div>
@@ -42,19 +43,23 @@ export function CreditSummary({ result }: CreditSummaryProps) {
   const totalTax = result.totalKkdf + result.totalBsmv;
 
   return (
-    <div className="no-print rounded-lg border border-border bg-surface p-5 sm:p-6 shadow-[var(--shadow-card)]">
-      <p className="text-xs font-medium uppercase tracking-wide text-primary-600">
-        {creditLabel}
-      </p>
-      <p className="mt-2 text-sm text-foreground-muted">Aylık taksit</p>
-      <p className="mt-1 text-4xl sm:text-5xl font-semibold tracking-tight text-foreground tabular-nums transition-all duration-200">
-        {formatCurrency(result.monthlyPayment)}
-        <span className="ml-2 text-lg font-medium text-foreground-muted">
-          ₺ / ay
-        </span>
-      </p>
+    <div className="no-print rounded-lg border border-border bg-surface px-4 py-3 sm:px-5 sm:py-3.5 shadow-[var(--shadow-card)]">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+        <div className="min-w-0">
+          <p className="text-[11px] font-medium uppercase tracking-wide text-primary-600">
+            {creditLabel}
+          </p>
+          <p className="mt-1 text-xs text-foreground-muted">Aylık taksit</p>
+          <p className="mt-0.5 text-3xl font-semibold tracking-tight text-foreground tabular-nums leading-none">
+            {formatCurrency(result.monthlyPayment)}
+            <span className="ml-1.5 text-sm font-medium text-foreground-muted">
+              ₺ / ay
+            </span>
+          </p>
+        </div>
+      </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mt-3 pt-3 border-t border-border grid grid-cols-2 gap-y-2 gap-x-4 sm:grid-cols-4">
         <MiniMetric
           label="Toplam geri ödeme"
           value={`${formatCurrency(result.totalRepayment)} ₺`}

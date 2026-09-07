@@ -268,7 +268,7 @@ export function PaymentSchedule({
 }: PaymentScheduleProps) {
   return (
     <Card className="print-area">
-      <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+      <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="space-y-0.5 min-w-0">
           <CardTitle>Ödeme Planı</CardTitle>
           <p className="text-sm text-foreground-muted">
@@ -276,7 +276,7 @@ export function PaymentSchedule({
           </p>
         </div>
         {headerAction ? (
-          <div className="shrink-0 no-print">{headerAction}</div>
+          <div className="w-full sm:w-auto shrink-0 no-print">{headerAction}</div>
         ) : null}
       </CardHeader>
       <CardBody className="px-3 sm:px-5 overflow-x-hidden">
@@ -285,7 +285,7 @@ export function PaymentSchedule({
           <PaymentScheduleTable schedule={schedule} totalRow={totalRow} />
         </div>
         {/* Mobile: collapsible cards */}
-        <div className="md:hidden">
+        <div className="md:hidden min-w-0">
           <PaymentScheduleMobileCards schedule={schedule} />
         </div>
       </CardBody>

@@ -57,8 +57,13 @@ export function ExportActions({
   };
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      <Button
+    <div
+      className={cn(
+        "flex flex-wrap gap-2 w-full sm:w-auto",
+        "[&>button]:flex-1 sm:[&>button]:flex-none",
+        className
+      )}
+    >      <Button
         type="button"
         variant="secondary"
         size={compact ? "sm" : "md"}

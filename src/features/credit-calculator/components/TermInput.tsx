@@ -55,7 +55,7 @@ export function TermInput({
         invalid={!!error}
         suffix="Ay"
       />
-      <div className="flex flex-wrap gap-1.5 pt-1">
+      <div className="grid grid-cols-4 gap-1.5 pt-1 sm:flex sm:flex-wrap">
         {TERM_PRESETS.map((preset) => {
           const active = preset === value;
           return (
@@ -65,7 +65,7 @@ export function TermInput({
               onClick={() => onValueChange(preset)}
               aria-pressed={active}
               className={cn(
-                "min-h-[36px] min-w-[44px] px-2.5 py-1 text-xs rounded-md border",
+                "min-h-[44px] sm:min-h-[36px] sm:min-w-[44px] px-1.5 sm:px-2.5 py-1 text-[11px] sm:text-xs rounded-md border",
                 "transition-colors duration-150",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                 active

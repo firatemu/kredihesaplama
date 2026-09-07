@@ -22,25 +22,26 @@ export function CreditCalculatorPage() {
   }, []);
 
   return (
-    <main className="container mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-      <header className="mb-8 sm:mb-10">
+    <main className="container mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <header className="mb-6">
         <div className="flex items-center gap-3 mb-1">
           <span
-            className="inline-block h-8 w-1.5 rounded-full bg-primary-600"
+            className="inline-block h-7 w-1.5 rounded-full bg-primary-600"
             aria-hidden="true"
           />
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
             Kredi Hesaplama
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-foreground-muted mt-2 max-w-2xl pl-5">
+        <p className="text-sm text-foreground-muted mt-1.5 max-w-2xl pl-5">
           Tutarı, faiz oranını ve vadeyi girin; aylık taksitinizi ve ödeme
           planınızı anında görün.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,380px)_1fr] gap-6">
-        <div className="lg:sticky lg:top-6 lg:self-start">
+      {/* Form + results column: no dead empty space beside the form */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,360px)_1fr] gap-5 items-start">
+        <div className="lg:sticky lg:top-4 lg:self-start">
           <CreditInputPanel
             values={values}
             errors={errors}
@@ -49,56 +50,57 @@ export function CreditCalculatorPage() {
             onReset={reset}
           />
         </div>
-        <div className="min-w-0">
+
+        <div className="min-w-0 flex flex-col gap-4">
           <CreditSummary result={result} />
+
+          {result ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <PaymentBreakdownChart result={result} />
+              <RemainingPrincipalChart schedule={result.schedule} />
+            </div>
+          ) : null}
+
+          {result ? (
+            <PaymentSchedule
+              schedule={result.schedule}
+              totalRow={{
+                payment: result.totalRepayment,
+                principal: result.totalPrincipal,
+                interest: result.totalInterest,
+                kkdf: result.totalKkdf,
+                bsmv: result.totalBsmv,
+              }}
+              headerAction={
+                <ExportActions
+                  input={result.input}
+                  result={result}
+                  compact
+                />
+              }
+            />
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Ödeme Planı</CardTitle>
+                <p className="text-sm text-foreground-muted">
+                  Hesaplama yapıldıktan sonra ödeme planı burada görüntülenir.
+                </p>
+              </CardHeader>
+              <CardBody>
+                <div className="flex flex-col items-center justify-center text-center text-foreground-muted py-8">
+                  <Wallet className="h-7 w-7 mb-2" aria-hidden="true" />
+                  <p className="text-sm">
+                    Önce kredi bilgilerinizi girip hesapla butonuna basın.
+                  </p>
+                </div>
+              </CardBody>
+            </Card>
+          )}
         </div>
       </div>
 
-      <div className="mt-6 min-w-0">
-        {result ? (
-          <PaymentSchedule
-            schedule={result.schedule}
-            totalRow={{
-              payment: result.totalRepayment,
-              principal: result.totalPrincipal,
-              interest: result.totalInterest,
-              kkdf: result.totalKkdf,
-              bsmv: result.totalBsmv,
-            }}
-            headerAction={
-              <ExportActions
-                input={result.input}
-                result={result}
-                compact
-              />
-            }
-          />
-        ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Ödeme Planı</CardTitle>
-              <p className="text-sm text-foreground-muted">
-                Hesaplama yapıldıktan sonra ödeme planı burada görüntülenir.
-              </p>
-            </CardHeader>
-            <CardBody>
-              <div className="flex flex-col items-center justify-center text-center text-foreground-muted py-10">
-                <Wallet className="h-8 w-8 mb-3" aria-hidden="true" />
-                <p>Önce kredi bilgilerinizi girip hesapla butonuna basın.</p>
-              </div>
-            </CardBody>
-          </Card>
-        )}
-      </div>
-
-      {result ? (
-        <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <PaymentBreakdownChart result={result} />
-          <RemainingPrincipalChart schedule={result.schedule} />
-        </div>
-      ) : null}
-
-      <footer className="mt-10">
+      <footer className="mt-8">
         <CreditDisclaimer />
       </footer>
     </main>
